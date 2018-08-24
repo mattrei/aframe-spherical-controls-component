@@ -11,7 +11,7 @@ For [A-Frame](https://aframe.io).
 
 ### API
 
-The component sets the matrix of the entity directly. Use _getWorldPosition()_ or _getWorldRotation()_ to obtain positional and rotational data.
+The component sets the matrix of the entity directly. Use the _position_ and _rotation_ properties from the object to obtain positional and rotational data.
 
 | Property | Description | Default Value |
 | -------- | ----------- | ------------- |
@@ -27,7 +27,7 @@ The component sets the matrix of the entity directly. Use _getWorldPosition()_ o
 
 | Property | Description | Default Value |
 | -------- | ----------- | ------------- |
-| getLatLonAzimuth | Returns the current latitude, longitude position and looking direction azimuth in radians | {lat: 0, lon: 0, azimuth: 0}
+| getLatLonAzimuth | Returns the current latitude, longitude position and looking direction azimuth in radians | `{lat: 0, lon: 0, azimuth: 0}`
 
 ### Usage
 Do not set the  _position_ or _rotation_ directly on this component because the get overriden. Always create a surrounding entity for relative moving.
