@@ -15,11 +15,13 @@ The component sets the matrix of the entity directly. Use _getWorldPosition()_ o
 
 | Property | Description | Default Value |
 | -------- | ----------- | ------------- |
+| enabled | Whether the controls are enabled | true |
 | radius | The radius of the spherical movement | 1 |
 | inner | The minimum radius of the spherical movement | 1 |
 | outer | The maximum radius of the spherical movement | 1 |
-| speed | Normalized movement speed | 1 |
-| enabled | Whether the automatic spherical movement is enabled | true |
+| velocity | Movement speed | 1 |
+| acceleration | Movement speed | 65 |
+| easing | Movement speed | 20 |
 | latLng | Sets the initial position according to latitude (-90, 90) and longitude (-180, 180) | [0,0] |
 
 ### Methods

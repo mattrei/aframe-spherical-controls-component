@@ -4,6 +4,8 @@ if (typeof AFRAME === 'undefined') {
   throw new Error('Component attempted to register before AFRAME was available.');
 }
 
+const COMPONENT_SUFFIX = '-controls';
+
 /**
  * Fly Spherical component for A-Frame.
  */
@@ -32,12 +34,25 @@ AFRAME.registerComponent('spherical-controls', {
     enabled: {
       type: 'boolean',
       default: true
+    },
+    controls: { 
+      default: ['gamepad', 'trackpad', 'keyboard', 'touch'] 
     }
 
   },
 
 
   init: function () {
+    const el = this.el;
+    this.velocityCtrl = null;
+    this.velocity = new THREE.Vector3();
+
+    if (el.sceneEl.hasLoaded) {
+      this.injectControls();
+    } else {
+      el.sceneEl.addEventListener('loaded', this.injectControls.bind(this));
+    }
+
     this.paused = false;
     this.camera = this.el.sceneEl.camera;
 
@@ -61,7 +76,34 @@ AFRAME.registerComponent('spherical-controls', {
   tick: function (time, delta) {
     if (!this.data.enabled || this.paused) return;
 
+    delta = delta/1000;
     this.move(delta);
+  },
+
+  injectControls: function () {
+    const data = this.data;
+    var name;
+
+    for (let i = 0; i < data.controls.length; i++) {
+      name = data.controls[i] + COMPONENT_SUFFIX;
+      if (!this.el.components[name]) {
+        this.el.setAttribute(name, '');
+      }
+      }
+  },
+
+  updateVelocityCtrl: function () {
+    const data = this.data;
+    if (data.enabled) {
+      for (let i = 0, l = data.controls.length; i < l; i++) {
+        const control = this.el.components[data.controls[i] + COMPONENT_SUFFIX];
+        if (control && control.isVelocityActive()) {
+          this.velocityCtrl = control;
+          return;
+        }
+      }
+      this.velocityCtrl = null;
+    }
   },
 
   getForward: function () {
@@ -72,12 +114,24 @@ AFRAME.registerComponent('spherical-controls', {
     };
   }(),
 
-  move: function (delta) {
+  move: function (dt) {
     const data = this.data;
-    var distance = data.speed * (delta / 1000);
+    const control = this.velocityControl;
+
+    const velocity = this.velocity;
+
+    velocity.setLength(data.speed * dt);
+    if (control) {
+      velocity.copy(this.control.getVelocity());
+      velocity.multiplyScalar(data.speed * dt);
+    }
+
+//    console.log(velocity.length())
+
 
     // set length of forward z-axis
-    var forward = this.getForward().setLength(distance);
+    //var forward = this.getForward().setLength(velocity.length());
+    var forward = this.getForward().setLength(data.speed * dt);
 
     // change position by forward
     if (this.position.add(forward)) { 
