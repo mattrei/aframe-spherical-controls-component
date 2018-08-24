@@ -1,7 +1,7 @@
-## aframe-fly-spherical-component
+## aframe-spherical-controls-component
 
-[![Version](http://img.shields.io/npm/v/aframe-fly-spherical-component.svg?style=flat-square)](https://npmjs.org/package/aframe-fly-spherical-component)
-[![License](http://img.shields.io/npm/l/aframe-fly-spherical-component.svg?style=flat-square)](https://npmjs.org/package/aframe-fly-spherical-component)
+[![Version](http://img.shields.io/npm/v/aframe-spherical-controls-component.svg?style=flat-square)](https://npmjs.org/package/aframe-spherical-controls-component)
+[![License](http://img.shields.io/npm/l/aframe-spherical-controls-component.svg?style=flat-square)](https://npmjs.org/package/aframe-spherical-controls-component)
 
 A Fly Spherical component for A-Frame.
 This component orbits the camera automatically around a sphere. It is a bit opionated, because it is designed for mobile devices. 
@@ -43,12 +43,12 @@ Install and use by directly including the [browser files](dist):
 <head>
   <title>My A-Frame Scene</title>
   <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
-  <script src="https://unpkg.com/aframe-fly-spherical-component/dist/aframe-fly-spherical-component.min.js"></script>
+  <script src="https://unpkg.com/aframe-spherical-controls-component/dist/aframe-spherical-controls-component.min.js"></script>
 </head>
 
 <body>
   <a-scene>
-    <a-entity fly-spherical="foo: bar"></a-entity>
+    <a-entity spherical-controls="foo: bar"></a-entity>
   </a-scene>
 </body>
 ```
@@ -58,12 +58,12 @@ Install and use by directly including the [browser files](dist):
 Install via npm:
 
 ```bash
-npm install aframe-fly-spherical-component
+npm install aframe-spherical-controls-component
 ```
 
 Then require and use.
 
 ```js
 require('aframe');
-require('aframe-fly-spherical-component');
+require('aframe-spherical-controls-component');
 ```
