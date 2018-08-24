@@ -17,18 +17,17 @@ The component sets the matrix of the entity directly. Use _getWorldPosition()_ o
 | -------- | ----------- | ------------- |
 | enabled | Whether the controls are enabled | true |
 | radius | The radius of the spherical movement | 1 |
-| inner | The minimum radius of the spherical movement | 1 |
-| outer | The maximum radius of the spherical movement | 1 |
-| velocity | Movement speed | 1 |
-| acceleration | Movement speed | 65 |
-| easing | Movement speed | 20 |
+| minRadius | The minimum offset from the radius for of the spherical movement | 0.1 |
+| maxRadius | The maximum offset from the radius of the spherical movement | 0.1 |
+| speed | Movement speed | 1 |
 | latLng | Sets the initial position according to latitude (-90, 90) and longitude (-180, 180) | [0,0] |
+| lookDirection | Sets the looking direction of the camera | 0 0 1 |
 
 ### Methods
 
 | Property | Description | Default Value |
 | -------- | ----------- | ------------- |
-| getLatLonAzimuth | Returns the current latitude, longitude and azimuth in radians of the movement | {lat: 0, lon: 0, azimuth: 0}
+| getLatLonAzimuth | Returns the current latitude, longitude position and looking direction azimuth in radians | {lat: 0, lon: 0, azimuth: 0}
 
 ### Usage
 Do not set the  _position_ or _rotation_ directly on this component because the get overriden. Always create a surrounding entity for relative moving.
