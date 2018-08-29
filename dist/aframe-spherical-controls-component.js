@@ -40,7 +40,7 @@ AFRAME.registerComponent('spherical-controls', {
       type: 'array',
       default: [0, 0]
     },
-    lookDirection: {
+    upVector: {
       type: 'vec3',
       default: '0 1 0'
     }
@@ -68,9 +68,9 @@ AFRAME.registerComponent('spherical-controls', {
     this.position.copy(pos);
 
     this.look = new THREE.Vector3(
-      -data.lookDirection.x, 
-      -data.lookDirection.y, 
-      -data.lookDirection.z
+      -data.upVector.x, 
+      -data.upVector.y, 
+      -data.upVector.z
     );
   },
 
@@ -145,13 +145,12 @@ AFRAME.registerComponent('spherical-controls', {
   getLatLonAzimuth: function () {
     const position = this.position.clone();
 
-    const nextPosition = position.clone().add(this.getForward());           // EXTRAHIERT DEN ANGESTREBTEN Z-VEKTOR!
+    const nextPosition = position.clone().add(this.getForward()); 
 
-    const latLon = this.latLonFromXYZ(position.x, position.y, position.z);     // AKTUELLE POSITON
-    const nextLatLon = this.latLonFromXYZ(nextPosition.x, nextPosition.y, nextPosition.z);     // VORWÄRTSBEWEGUNG
+    const latLon = this.latLonFromXYZ(position.x, position.y, position.z); 
+    const nextLatLon = this.latLonFromXYZ(nextPosition.x, nextPosition.y, nextPosition.z); 
 
-    // DELTA "VEKTOR" ROTATION BERECHNEN
-    var azimuth = Math.atan2(-(nextLatLon.lon - latLon.lon), nextLatLon.lat - latLon.lat);
+    const azimuth = Math.atan2(-(nextLatLon.lon - latLon.lon), nextLatLon.lat - latLon.lat);
 
     return {
       lat: latLon.lat,

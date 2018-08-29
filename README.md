@@ -21,7 +21,7 @@ The component sets the matrix of the entity directly. Use the _position_ and _ro
 | maxRadius | The maximum offset from the radius of the spherical movement | 0.1 |
 | speed | Movement speed | 1 |
 | latLng | Sets the initial position according to latitude (-90, 90) and longitude (-180, 180) | [0,0] |
-| lookDirection | Sets the looking direction of the camera | 0 0 1 |
+| upVector | Sets the up vector. Hardly ever needed to set manually | 0 1 0 |
 
 ### Methods
 

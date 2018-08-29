@@ -34,9 +34,9 @@ AFRAME.registerComponent('spherical-controls', {
       type: 'array',
       default: [0, 0]
     },
-    lookDirection: {
+    upVector: {
       type: 'vec3',
-      default: '0 0 1'
+      default: '0 1 0'
     }
   },
 
@@ -62,9 +62,9 @@ AFRAME.registerComponent('spherical-controls', {
     this.position.copy(pos);
 
     this.look = new THREE.Vector3(
-      -data.lookDirection.x, 
-      -data.lookDirection.y, 
-      -data.lookDirection.z
+      -data.upVector.x, 
+      -data.upVector.y, 
+      -data.upVector.z
     );
   },
 
