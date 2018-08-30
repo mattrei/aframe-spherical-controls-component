@@ -27,7 +27,7 @@ AFRAME.registerComponent('spherical-controls', {
       default: 0.1
     },
     speed: {
-      type: 'int',
+      type: 'number',
       default: 1
     },
     latLng: {
@@ -36,7 +36,7 @@ AFRAME.registerComponent('spherical-controls', {
     },
     upVector: {
       type: 'vec3',
-      default: '0 1 0'
+      default: {x: 0, y: 1, z: 0}
     }
   },
 
@@ -69,7 +69,7 @@ AFRAME.registerComponent('spherical-controls', {
   },
 
   tick: function (time, delta) {
-    if (!this.data.enabled || this.paused) return;
+    if (!this.data.enabled || this.paused || this.speed <= 0) return;
 
     delta = delta / 1000;
     this.move(delta);
