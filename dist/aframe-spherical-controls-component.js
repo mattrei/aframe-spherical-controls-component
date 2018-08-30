@@ -58,20 +58,21 @@ AFRAME.registerComponent('spherical-controls', {
     this.position = new THREE.Vector3(0, 1, 0);
     this.position.setLength(this.data.radius);
     this.forward = new THREE.Vector3(0, 0, 1);
-  },
-
-  update: function (oldData) {
-    const data = this.data;
-    const pos = this.xyzFromLatLon(data.latLng[0], data.latLng[1]);
-
-    pos.multiplyScalar(data.radius);
-    this.position.copy(pos);
-
     this.look = new THREE.Vector3(
       -data.upVector.x, 
       -data.upVector.y, 
       -data.upVector.z
     );
+  },
+
+  update: function (oldData) {
+    const data = this.data;
+
+    if (oldData.latLng !== data.latLng) {
+      const pos = this.xyzFromLatLon(data.latLng[0], data.latLng[1]);
+      pos.multiplyScalar(data.radius);
+      this.position.copy(pos);
+    }
   },
 
   tick: (function () {
