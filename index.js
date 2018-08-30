@@ -41,7 +41,6 @@ AFRAME.registerComponent('spherical-controls', {
   },
 
   init: function () {
-
     const data = this.data;
 
     this.paused = false;
@@ -53,8 +52,8 @@ AFRAME.registerComponent('spherical-controls', {
     this.position.setLength(this.data.radius);
     this.forward = new THREE.Vector3(0, 0, 1);
     this.look = new THREE.Vector3(
-      -data.upVector.x, 
-      -data.upVector.y, 
+      -data.upVector.x,
+      -data.upVector.y,
       -data.upVector.z
     );
   },
@@ -62,10 +61,12 @@ AFRAME.registerComponent('spherical-controls', {
   update: function (oldData) {
     const data = this.data;
 
-    if (oldData.latLng !== data.latLng) {
+    if (!oldData.latLng || oldData.latLng[0] !== data.latLng[0] || oldData.latLng[1] !== data.latLng[1]) {
       const pos = this.xyzFromLatLon(data.latLng[0], data.latLng[1]);
       pos.multiplyScalar(data.radius);
       this.position.copy(pos);
+      console.log('latlng', data.latLng);
+      console.log(' old latlng', oldData.latLng);
     }
   },
 
@@ -73,11 +74,9 @@ AFRAME.registerComponent('spherical-controls', {
     var matrix = new THREE.Matrix4();
 
     return function (time, delta) {
-
       if (!this.data.enabled || this.paused || this.speed <= 0) return;
 
       delta = delta / 1000;
-      const el = this.el;
       const data = this.data;
 
       const velocity = data.speed * delta;
@@ -88,14 +87,13 @@ AFRAME.registerComponent('spherical-controls', {
 
       // change position by forward
       if (this.position.add(forward)) {
-	var length = this.position.length();
-
+        const length = this.position.length();
 	// set max and min height
-	if (length < data.radius - data.minRadius) {
-	  this.position.setLength(data.radius - data.minRadius);
-	} else if (length > data.radius + data.maxRadius) {
-	  this.position.setLength(data.radius + data.maxRadius);
-	}
+        if (length < data.radius - data.minRadius) {
+          this.position.setLength(data.radius - data.minRadius);
+        } else if (length > data.radius + data.maxRadius) {
+          this.position.setLength(data.radius + data.maxRadius);
+        }
       }
 
       // thats were cross products are used most
@@ -126,7 +124,7 @@ AFRAME.registerComponent('spherical-controls', {
       object.matrixAutoUpdate = false;
       object.matrix = matrix;
       object.updateMatrixWorld();  // also apply to child
-    }
+    };
   })(),
 
   getForward: (function () {
@@ -140,10 +138,10 @@ AFRAME.registerComponent('spherical-controls', {
   getLatLonAzimuth: function () {
     const position = this.position.clone();
 
-    const nextPosition = position.clone().add(this.getForward()); 
+    const nextPosition = position.clone().add(this.getForward());
 
-    const latLon = this.latLonFromXYZ(position.x, position.y, position.z); 
-    const nextLatLon = this.latLonFromXYZ(nextPosition.x, nextPosition.y, nextPosition.z); 
+    const latLon = this.latLonFromXYZ(position.x, position.y, position.z);
+    const nextLatLon = this.latLonFromXYZ(nextPosition.x, nextPosition.y, nextPosition.z);
 
     const azimuth = Math.atan2(-(nextLatLon.lon - latLon.lon), nextLatLon.lat - latLon.lat);
 
