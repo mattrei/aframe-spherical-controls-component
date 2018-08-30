@@ -74,12 +74,65 @@ AFRAME.registerComponent('spherical-controls', {
     );
   },
 
-  tick: function (time, delta) {
-    if (!this.data.enabled || this.paused || this.speed <= 0) return;
+  tick: (function () {
+    var matrix = new THREE.Matrix4();
 
-    delta = delta / 1000;
-    this.move(delta);
-  },
+    return function (time, delta) {
+
+      if (!this.data.enabled || this.paused || this.speed <= 0) return;
+
+      delta = delta / 1000;
+      const el = this.el;
+      const data = this.data;
+
+      const velocity = data.speed * delta;
+
+      // set length of forward z-axis
+      // var forward = this.getForward().setLength(velocity.length());
+      var forward = this.getForward().setLength(velocity);
+
+      // change position by forward
+      if (this.position.add(forward)) {
+	var length = this.position.length();
+
+	// set max and min height
+	if (length < data.radius - data.minRadius) {
+	  this.position.setLength(data.radius - data.minRadius);
+	} else if (length > data.radius + data.maxRadius) {
+	  this.position.setLength(data.radius + data.maxRadius);
+	}
+      }
+
+      // thats were cross products are used most
+      // https://classroom.udacity.com/courses/cs291/lessons/158750187/concepts/1694147620923#
+      // find the frame of reference
+
+      // calculate with the cross product the real forward/look vector
+
+      // up or normal vector
+      var up = this.position.clone().sub(this.origin).normalize();
+      // tangent vector
+      var tangent = up.clone().cross(this.look).normalize();
+      // look vector or binormal/bitangent vector
+      var look = tangent.clone().cross(up).normalize();
+
+      // object.quaternion.setFromUnitVectors(this.forward, look);
+      this.look = look;
+
+      const c = matrix.elements;
+      // aplpy x, y and z axis basis vector
+      // 4th column is position
+      c[0] = tangent.x, c[1] = tangent.y, c[2] = tangent.z, c[3] = 0;   // tangent vector
+      c[4] = up.x, c[5] = up.y, c[6] = up.z, c[7] = 0;   // up Vector
+      c[8] = look.x, c[9] = look.y, c[10] = look.z, c[11] = 0; // look vector
+      c[12] = this.position.x, c[13] = this.position.y, c[14] = this.position.z, c[15] = 1;
+
+      const object = this.el.object3D;
+      object.matrixAutoUpdate = false;
+      object.matrix = matrix;
+      object.updateMatrixWorld();  // also apply to child
+    }
+  })(),
 
   getForward: (function () {
     const zaxis = new THREE.Vector3();
@@ -88,59 +141,6 @@ AFRAME.registerComponent('spherical-controls', {
       return zaxis;
     };
   }()),
-
-  move: function (dt) {
-    const el = this.el;
-    const data = this.data;
-
-    const velocity = data.speed * dt;
-
-    // set length of forward z-axis
-    // var forward = this.getForward().setLength(velocity.length());
-    var forward = this.getForward().setLength(velocity);
-
-    // change position by forward
-    if (this.position.add(forward)) {
-      var length = this.position.length();
-
-      // set max and min height
-      if (length < data.radius - data.minRadius) {
-        this.position.setLength(data.radius - data.minRadius);
-      } else if (length > data.radius + data.maxRadius) {
-        this.position.setLength(data.radius + data.maxRadius);
-      }
-    }
-
-    // thats were cross products are used most
-    // https://classroom.udacity.com/courses/cs291/lessons/158750187/concepts/1694147620923#
-    // find the frame of reference
-
-    // calculate with the cross product the real forward/look vector
-
-    // up or normal vector
-    var up = this.position.clone().sub(this.origin).normalize();
-    // tangent vector
-    var tangent = up.clone().cross(this.look).normalize();
-    // look vector or binormal/bitangent vector
-    var look = tangent.clone().cross(up).normalize();
-
-    // object.quaternion.setFromUnitVectors(this.forward, look);
-    this.look = look;
-
-    var matrix = new THREE.Matrix4();
-    const c = matrix.elements;
-    // aplpy x, y and z axis basis vector
-    // 4th column is position
-    c[0] = tangent.x, c[1] = tangent.y, c[2] = tangent.z, c[3] = 0;   // tangent vector
-    c[4] = up.x, c[5] = up.y, c[6] = up.z, c[7] = 0;   // up Vector
-    c[8] = look.x, c[9] = look.y, c[10] = look.z, c[11] = 0; // look vector
-    c[12] = this.position.x, c[13] = this.position.y, c[14] = this.position.z, c[15] = 1;
-
-    const object = this.el.object3D;
-    object.matrixAutoUpdate = false;
-    object.matrix = matrix;
-    object.updateMatrixWorld();  // also apply to child
-  },
 
   getLatLonAzimuth: function () {
     const position = this.position.clone();
