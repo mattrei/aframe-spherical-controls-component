@@ -71,8 +71,6 @@ AFRAME.registerComponent('spherical-controls', {
       const pos = this.xyzFromLatLon(data.latLng[0], data.latLng[1]);
       pos.multiplyScalar(data.radius);
       this.position.copy(pos);
-      console.log('latlng', data.latLng);
-      console.log(' old latlng', oldData.latLng);
     }
   },
 
