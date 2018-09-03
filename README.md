@@ -5,7 +5,7 @@
 
 A Fly Spherical component for A-Frame.
 This component orbits the camera automatically around a sphere. It is not a universial control, because it is mostly designed for mobile devices using the rotation. You can not set it directly on the camera, however it needs to be set as a rig around the camera (aka _camera rig pattern_).
-It differs from the (Orbit controls component)[https://github.com/ngokevin/kframe/tree/master/components/orbit-controls] in that way that it does not substitute _look-controls_ component, but uses it for determing the movement direction.
+It differs from the [Orbit Controls component](https://github.com/ngokevin/kframe/tree/master/components/orbit-controls) in that way that it does not substitute _look-controls_ component, but uses it for determing the movement direction.
 
 For [A-Frame](https://aframe.io).
 
