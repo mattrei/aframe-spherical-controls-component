@@ -17,8 +17,8 @@ The component sets the matrix of the entity directly. Use the _position_ and _ro
 | -------- | ----------- | ------------- |
 | enabled | Whether the controls are enabled | true |
 | radius | The radius of the spherical movement | 1 |
-| minRadius | The minimum offset from the radius for of the spherical movement | 0.1 |
-| maxRadius | The maximum offset from the radius of the spherical movement | 0.1 |
+| minRadius | The minimum offset from the radius for of the spherical movement | 0 |
+| maxRadius | The maximum offset from the radius of the spherical movement | 0 |
 | speed | Movement speed | 1 |
 | latLng | Sets the initial position according to latitude (-90, 90) and longitude (-180, 180) | [0,0] |
 | upVector | Sets the up vector. Hardly ever needed to set manually | 0 1 0 |

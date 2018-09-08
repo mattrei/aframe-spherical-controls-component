@@ -20,11 +20,11 @@ AFRAME.registerComponent('spherical-controls', {
     },
     minRadius: {
       type: 'number',
-      default: 0.1
+      default: 0
     },
     maxRadius: {
       type: 'number',
-      default: 0.1
+      default: 0
     },
     speed: {
       type: 'number',
