@@ -4,8 +4,8 @@
 [![License](http://img.shields.io/npm/l/aframe-spherical-controls-component.svg?style=flat-square)](https://npmjs.org/package/aframe-spherical-controls-component)
 
 A Fly Spherical component for A-Frame.
-This component orbits the camera automatically around a sphere. It is a bit opionated, because it is designed for mobile devices. 
-It differs from the Orbit controls in that way that it does not substitute _look-controls_ component however uses it for automatic navigation.
+This component orbits the camera automatically around a sphere. It is not a universial control, because it is mostly designed for mobile devices using the rotation. You can not set it directly on the camera, however it needs to be set as a rig around the camera (aka _camera rig pattern_).
+It differs from the [Orbit Controls component](https://github.com/ngokevin/kframe/tree/master/components/orbit-controls) in that way that it does not substitute _look-controls_ component, but uses it for determing the movement direction.
 
 For [A-Frame](https://aframe.io).
 
