@@ -171,7 +171,8 @@ AFRAME.registerComponent('spherical-controls', {
     // center lat and lon
     const nlat = (lat % 90) * Math.PI / 180;
  //   const nlon = (lon + 180) * Math.PI / 180;
-    const nlon = THREE.Math.degToRad((lon + 90) % 180);
+    // 0 is in the middle however the sphere starts on the left, thats why we need to offset
+    const nlon = THREE.Math.degToRad((lon + 180) % 180);
     console.log((lon + 90) % 180)
     console.log(lon, nlon)
 

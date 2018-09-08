@@ -38,7 +38,7 @@ AFRAME.registerComponent('spherical-controls', {
     },
     latLng: {
       type: 'array',
-      default: [0, 0]
+      default: [0, 0],
     },
     upVector: {
       type: 'vec3',
@@ -68,7 +68,7 @@ AFRAME.registerComponent('spherical-controls', {
     const data = this.data;
 
     if (!oldData.latLng || oldData.latLng[0] !== data.latLng[0] || oldData.latLng[1] !== data.latLng[1]) {
-      const pos = this.xyzFromLatLon(data.latLng[0], data.latLng[1]);
+      const pos = this.xyzFromLatLon(parseFloat(data.latLng[0]), parseFloat(data.latLng[1]));
       pos.multiplyScalar(data.radius);
       this.position.copy(pos);
     }
@@ -175,8 +175,12 @@ AFRAME.registerComponent('spherical-controls', {
 
   xyzFromLatLon: function (lat, lon) {
     // center lat and lon
-    const nlat = lat * Math.PI / 180;
-    const nlon = (lon + 180) * Math.PI / 180;
+    const nlat = (lat % 90) * Math.PI / 180;
+ //   const nlon = (lon + 180) * Math.PI / 180;
+    // 0 is in the middle however the sphere starts on the left, thats why we need to offset
+    const nlon = THREE.Math.degToRad((lon + 180) % 180);
+    console.log((lon + 90) % 180);
+    console.log(lon, nlon);
 
     return new THREE.Vector3(
       Math.cos(nlat) * Math.cos(nlon),
