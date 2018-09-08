@@ -12,10 +12,14 @@
   <body>
     <a-scene environment="preset: forest">
 
+	    <a-box position="0 5 -10">
+
+	</a-box>
+
 	    <a-entity position="0 5 0">
       <a-sphere id="sphere" radius="1" wireframe="true" color="red" ></a-sphere>
 
-      <a-entity spherical-controls="radius: 1.2; speed: 1;"
+      <a-entity spherical-controls="radius: 1.2; speed: 1; latLng: 0,90;"
 	      animation="property: spherical-controls.speed; from: 0; to: 1; dur: 2000">
 
 
