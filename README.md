@@ -20,7 +20,8 @@ The component sets the matrix of the entity directly. Use the _position_ and _ro
 | minRadius | The minimum offset from the radius for of the spherical movement | 0 |
 | maxRadius | The maximum offset from the radius of the spherical movement | 0 |
 | speed | Movement speed | 1 |
-| latLng | Sets the spherical position according to plain latitude (between -90 and 90) and longitude (between -180 and 180) coordinates in degrees  | [0,0] |
+| lat | Sets the spherical position according to the planar latitude (between -90 and 90) coordinate in degrees  | 0 |
+| lng | Sets the spherical position according to the planar longitude (between -180 and 180) coordinate in degrees  | 0 |
 | upVector | Sets the up vector like in the `lookAt` function of Three.JS. Hardly ever needed to set manually | 0 1 0 |
 
 ### Methods
@@ -28,6 +29,7 @@ The component sets the matrix of the entity directly. Use the _position_ and _ro
 | Property | Description | Default Value |
 | -------- | ----------- | ------------- |
 | getLatLngAzimuth | Returns the current latitude and longitude coordinates and looking direction azimuth in degrees | `{lat: 0, lng: 0, azimuth: 0}`
+
 ### Usage
 Do not set the  _position_ or _rotation_ directly on this component because the get overriden. Always create a surrounding entity for relative moving.
 

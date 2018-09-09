@@ -29,9 +29,13 @@ AFRAME.registerComponent('spherical-controls', {
       type: 'number',
       default: 1
     },
-    latLng: {
-      type: 'array',
-      default: [0, 0],
+    lat: {
+      type: 'number',
+      default: 0,
+    },
+    lng: {
+      type: 'number',
+      default: 0,
     },
     upVector: {
       type: 'vec3',
@@ -60,8 +64,8 @@ AFRAME.registerComponent('spherical-controls', {
   update: function (oldData) {
     const data = this.data;
 
-    if (!oldData.latLng || oldData.latLng[0] !== data.latLng[0] || oldData.latLng[1] !== data.latLng[1]) {
-      const pos = this.latLngToPosition(parseFloat(data.latLng[0]), parseFloat(data.latLng[1]));
+    if (!oldData.lat || oldData.lat !== data.lat || oldData.lng !== data.lng) {
+      const pos = this.latLngToPosition(data.lat, data.lng);
       pos.multiplyScalar(data.radius);
       this.position.copy(pos);
     }

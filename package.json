@@ -1,6 +1,6 @@
 {
   "name": "aframe-spherical-controls-component",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Controls for spherical movements by looking for A-Frame.",
   "main": "index.js",
   "unpkg": "dist/aframe-spherical-controls-component.min.js",
