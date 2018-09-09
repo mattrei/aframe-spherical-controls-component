@@ -8,25 +8,41 @@
     <script src="../../dist/aframe-spherical-controls-component.min.js"></script>
     <script src="https://unpkg.com/aframe-environment-component@1.0.0/dist/aframe-environment-component.min.js"></script>
     <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
+	<script>
+		AFRAME.registerComponent('log-coordinates', {
+			schema: {},
+			init:function(){
+				this.controls = this.el.components['spherical-controls'];
+			},
+			tick:function(time, delta) {
+				if (this.controls) {
+					console.log(this.controls.getLatLngAzimuth());
+				}
+			}
+		})
+	</script>
   </head>
   <body>
     <a-scene environment="preset: forest">
+	<a-assets>
+		<img id="img-uvgrid" src="assets/UV_Grid_Sm.jpg" />
+	</a-assets>
 
 	    <a-box position="0 5 -10">
 
 	</a-box>
 
-	    <a-entity position="0 5 0">
-      <a-sphere id="sphere" radius="1" wireframe="true" color="red" ></a-sphere>
+	<a-entity position="0 5 0">
+	      <a-sphere id="sphere" radius="1" src="#img-uvgrid"></a-sphere>
 
-      <a-entity spherical-controls="radius: 1.2; speed: 1; latLng: 0,90;"
-	      animation="property: spherical-controls.speed; from: 0; to: 1; dur: 2000">
+	      <a-entity spherical-controls="radius: 1.2; latLng: 0,-90;"
+		      animation="property: spherical-controls.speed; from: 0; to: 0.5; dur: 2000"
+		      log-coordinates>
 
-
-          <a-camera position="0 0 0">
-          </a-camera>
-      </a-entity>
-	    </a-entity>
+		  <a-camera position="0 0 0">
+		  </a-camera>
+	      </a-entity>
+	</a-entity>
     </a-scene>
 
     <!-- GitHub Corner. -->

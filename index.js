@@ -8,7 +8,6 @@ if (typeof AFRAME === 'undefined') {
  * Spherical controls component for A-Frame.
  */
 AFRAME.registerComponent('spherical-controls', {
-  dependencies: ['velocity'],
   schema: {
     enabled: {
       type: 'boolean',
@@ -62,7 +61,7 @@ AFRAME.registerComponent('spherical-controls', {
     const data = this.data;
 
     if (!oldData.latLng || oldData.latLng[0] !== data.latLng[0] || oldData.latLng[1] !== data.latLng[1]) {
-      const pos = this.xyzFromLatLon(parseFloat(data.latLng[0]), parseFloat(data.latLng[1]));
+      const pos = this.latLngToPosition(parseFloat(data.latLng[0]), parseFloat(data.latLng[1]));
       pos.multiplyScalar(data.radius);
       this.position.copy(pos);
     }
@@ -81,7 +80,7 @@ AFRAME.registerComponent('spherical-controls', {
 
       // set length of forward z-axis
       // var forward = this.getForward().setLength(velocity.length());
-      var forward = this.getForward().setLength(velocity);
+      var forward = this._getForward().setLength(velocity);
 
       // change position by forward
       if (this.position.add(forward)) {
@@ -125,7 +124,7 @@ AFRAME.registerComponent('spherical-controls', {
     };
   })(),
 
-  getForward: (function () {
+  _getForward: (function () {
     const zaxis = new THREE.Vector3();
     return function () {
       this.camera.getWorldDirection(zaxis);
@@ -133,53 +132,50 @@ AFRAME.registerComponent('spherical-controls', {
     };
   }()),
 
-  getLatLonAzimuth: function () {
+  getLatLngAzimuth: function () {
     const position = this.position.clone();
 
-    const nextPosition = position.clone().add(this.getForward());
+    const nextPosition = position.clone().add(this._getForward());
 
-    const latLon = this.latLonFromXYZ(position.x, position.y, position.z);
-    const nextLatLon = this.latLonFromXYZ(nextPosition.x, nextPosition.y, nextPosition.z);
+    const latLng = this.positionToLatLng(position.x, position.y, position.z);
+    const nextLatLng = this.positionToLatLng(nextPosition.x, nextPosition.y, nextPosition.z);
 
-    const azimuth = Math.atan2(-(nextLatLon.lon - latLon.lon), nextLatLon.lat - latLon.lat);
+    const azimuth = Math.atan2(-(nextLatLng.lng - latLng.lng), nextLatLng.lat - latLng.lat);
 
     return {
-      lat: latLon.lat,
-      lon: latLon.lon,
-      azimuth: azimuth
+      lat: THREE.Math.radToDeg(latLng.lat),
+      lng: THREE.Math.radToDeg(latLng.lng),
+      azimuth: THREE.Math.radToDeg(azimuth)
     };
   },
 
-  latLonFromXYZ: function (x, y, z) {
+  positionToLatLng: function (x, y, z) {
     const radius = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
 
     const lat = Math.asin(y / radius);    // or acos(z / radius)
-    var lon = Math.atan2(x, z) - Math.PI / 2;   // or atan2(y, x)
+    var lng = Math.atan2(x, z) - Math.PI / 2;   // or atan2(y, x)
 
     // reset longitude to the positive datum of the world
-    if (lon < -Math.PI) {
-      lon += 2 * Math.PI;
+    if (lng < -Math.PI) {
+      lng += 2 * Math.PI;
     }
 
     return {
       lat: lat,
-      lon: lon
+      lng: lng
     };
   },
 
-  xyzFromLatLon: function (lat, lon) {
-    // center lat and lon
-    const nlat = (lat % 90) * Math.PI / 180;
- //   const nlon = (lon + 180) * Math.PI / 180;
+  latLngToPosition: function (lat, lng) {
+    // center lat and lng
+    const nlat = THREE.Math.degToRad(lat);
     // 0 is in the middle however the sphere starts on the left, thats why we need to offset
-    const nlon = THREE.Math.degToRad((lon + 180) % 180);
-    console.log((lon + 90) % 180)
-    console.log(lon, nlon)
+    const nlng = THREE.Math.degToRad(lng + 180);
 
     return new THREE.Vector3(
-      Math.cos(nlat) * Math.cos(nlon),
+      Math.cos(nlat) * Math.cos(nlng),
       Math.sin(nlat),
-      Math.cos(nlat) * Math.sin(nlon)
+      Math.cos(nlat) * Math.sin(nlng)
     );
   },
 
