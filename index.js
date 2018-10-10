@@ -51,7 +51,7 @@ AFRAME.registerComponent('spherical-controls', {
     const el = this.el;
     const data = this.data;
 
-    this.enabled = true;
+    this.enabled = !data.vrMode;
 
     if (data.vrMode) {
       el.sceneEl.addEventListener('enter-vr', () => {
