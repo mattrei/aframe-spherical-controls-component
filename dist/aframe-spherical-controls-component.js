@@ -1,8 +1,74 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(factory());
-}(this, (function () { 'use strict';
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports) {
 
 /* global AFRAME */
 
@@ -15,10 +81,6 @@ if (typeof AFRAME === 'undefined') {
  */
 AFRAME.registerComponent('spherical-controls', {
   schema: {
-    enabled: {
-      type: 'boolean',
-      default: true
-    },
     radius: {
       type: 'number',
       default: 1.1
@@ -46,14 +108,39 @@ AFRAME.registerComponent('spherical-controls', {
     upVector: {
       type: 'vec3',
       default: {x: 0, y: 1, z: 0}
-    }
+    },
+    vrMode: {
+      type: 'boolean',
+      default: false
+    },
+    enabled: {
+      type: 'boolean',
+      default: true
+    },
   },
 
   init: function () {
+    const el = this.el;
     const data = this.data;
 
+    this.enabled = true;
+
+    if (data.vrMode) {
+      el.sceneEl.addEventListener('enter-vr', () => {
+	if (!AFRAME.utils.device.checkHeadsetConnected() &&
+	    !AFRAME.utils.device.isMobile()) { return; }
+	this.enabled = true;
+      });
+
+      el.sceneEl.addEventListener('exit-vr', () => {
+	if (!AFRAME.utils.device.checkHeadsetConnected() &&
+	    !AFRAME.utils.device.isMobile()) { return; }
+	this.enabled = false;
+      });
+    }
+
     this.paused = false;
-    this.camera = this.el.sceneEl.camera;
+    this.camera = el.sceneEl.camera;
 
     this.origin = new THREE.Vector3();
 
@@ -80,7 +167,7 @@ AFRAME.registerComponent('spherical-controls', {
     var matrix = new THREE.Matrix4();
 
     return function (time, delta) {
-      if (!this.data.enabled || this.paused || this.speed <= 0) return;
+      if (!this.data.enabled || this.paused || !this.enabled || this.speed <= 0) return;
 
       delta = delta / 1000;
       const data = this.data;
@@ -199,4 +286,6 @@ AFRAME.registerComponent('spherical-controls', {
   }
 });
 
-})));
+
+/***/ })
+/******/ ]);

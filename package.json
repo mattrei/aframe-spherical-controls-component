@@ -1,16 +1,16 @@
 {
   "name": "aframe-spherical-controls-component",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Controls for spherical movements by looking for A-Frame.",
   "main": "index.js",
   "unpkg": "dist/aframe-spherical-controls-component.min.js",
   "scripts": {
+    "build": "webpack index.js dist/aframe-spherical-controls-component.js",
     "dev": "budo index.js:dist/aframe-spherical-controls-component.min.js --port 7000 --live --open",
-    "dist": "npm run rollup && uglifyjs dist/aframe-spherical-controls-component.js > dist/aframe-spherical-controls-component.min.js",
-    "lint": "semistandard -v --fix | snazzy",
+    "dist": "npm run build && uglifyjs dist/aframe-spherical-controls-component.js > dist/aframe-spherical-controls-component.min.js",
+    "lint": "semistandard -v | snazzy",
     "prepublish": "npm run dist",
     "ghpages": "ghpages",
-    "rollup": "rollup index.js --output.format umd --name 'aframe-spherical-controls-component' --output.file dist/aframe-spherical-controls-component.js",
     "start": "npm run dev",
     "test": "karma start ./tests/karma.conf.js",
     "test:firefox": "karma start ./tests/karma.conf.js --browsers Firefox",
@@ -59,7 +59,8 @@
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
     "snazzy": "^4.0.0",
-    "uglify-es": "github:mishoo/UglifyJS2#harmony"
+    "uglify-es": "github:mishoo/UglifyJS2#harmony",
+    "webpack": "^2.7.0"
   },
   "semistandard": {
     "globals": [

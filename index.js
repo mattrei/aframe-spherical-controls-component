@@ -9,10 +9,6 @@ if (typeof AFRAME === 'undefined') {
  */
 AFRAME.registerComponent('spherical-controls', {
   schema: {
-    enabled: {
-      type: 'boolean',
-      default: true
-    },
     radius: {
       type: 'number',
       default: 1.1
@@ -40,14 +36,39 @@ AFRAME.registerComponent('spherical-controls', {
     upVector: {
       type: 'vec3',
       default: {x: 0, y: 1, z: 0}
-    }
+    },
+    vrMode: {
+      type: 'boolean',
+      default: false
+    },
+    enabled: {
+      type: 'boolean',
+      default: true
+    },
   },
 
   init: function () {
+    const el = this.el;
     const data = this.data;
 
+    this.enabled = true;
+
+    if (data.vrMode) {
+      el.sceneEl.addEventListener('enter-vr', () => {
+	if (!AFRAME.utils.device.checkHeadsetConnected() &&
+	    !AFRAME.utils.device.isMobile()) { return; }
+	this.enabled = true;
+      });
+
+      el.sceneEl.addEventListener('exit-vr', () => {
+	if (!AFRAME.utils.device.checkHeadsetConnected() &&
+	    !AFRAME.utils.device.isMobile()) { return; }
+	this.enabled = false;
+      });
+    }
+
     this.paused = false;
-    this.camera = this.el.sceneEl.camera;
+    this.camera = el.sceneEl.camera;
 
     this.origin = new THREE.Vector3();
 
@@ -74,7 +95,7 @@ AFRAME.registerComponent('spherical-controls', {
     var matrix = new THREE.Matrix4();
 
     return function (time, delta) {
-      if (!this.data.enabled || this.paused || this.speed <= 0) return;
+      if (!this.data.enabled || this.paused || !this.enabled || this.speed <= 0) return;
 
       delta = delta / 1000;
       const data = this.data;

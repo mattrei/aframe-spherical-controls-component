@@ -15,7 +15,6 @@ The component sets the matrix of the entity directly. Use the _position_ and _ro
 
 | Property | Description | Default Value |
 | -------- | ----------- | ------------- |
-| enabled | Whether the controls are enabled | true |
 | radius | The radius of the spherical movement | 1 |
 | minRadius | The minimum offset from the radius for of the spherical movement | 0 |
 | maxRadius | The maximum offset from the radius of the spherical movement | 0 |
@@ -23,6 +22,8 @@ The component sets the matrix of the entity directly. Use the _position_ and _ro
 | lat | Sets the spherical position according to the planar latitude (between -90 and 90) coordinate in degrees  | 0 |
 | lng | Sets the spherical position according to the planar longitude (between -180 and 180) coordinate in degrees  | 0 |
 | upVector | Sets the up vector like in the `lookAt` function of Three.JS. Hardly ever needed to set manually | 0 1 0 |
+| vrMode | Whether the controls are only enabled when in mobile VR mode | false |
+| enabled | Whether the controls are enabled | true |
 
 ### Methods
 
