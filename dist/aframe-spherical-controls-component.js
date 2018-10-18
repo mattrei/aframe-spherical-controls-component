@@ -113,6 +113,9 @@ AFRAME.registerComponent('spherical-controls', {
       type: 'boolean',
       default: false
     },
+    tilt: {
+      default: 0
+    },
     enabled: {
       type: 'boolean',
       default: true
@@ -164,7 +167,8 @@ AFRAME.registerComponent('spherical-controls', {
   },
 
   tick: (function () {
-    var matrix = new THREE.Matrix4();
+    const matrix = new THREE.Matrix4();
+    const rotationMatrix = new THREE.Matrix4();
 
     return function (time, delta) {
       if (!this.data.enabled || this.paused || !this.enabled || this.speed <= 0) return;
@@ -212,6 +216,9 @@ AFRAME.registerComponent('spherical-controls', {
       c[4] = up.x, c[5] = up.y, c[6] = up.z, c[7] = 0;   // up Vector
       c[8] = look.x, c[9] = look.y, c[10] = look.z, c[11] = 0; // look vector
       c[12] = this.position.x, c[13] = this.position.y, c[14] = this.position.z, c[15] = 1;
+
+      rotationMatrix.makeRotationX(THREE.Math.degToRad(this.data.tilt));
+      matrix.multiply(rotationMatrix);
 
       const object = this.el.object3D;
       object.matrixAutoUpdate = false;

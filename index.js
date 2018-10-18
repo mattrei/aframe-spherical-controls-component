@@ -41,6 +41,9 @@ AFRAME.registerComponent('spherical-controls', {
       type: 'boolean',
       default: false
     },
+    tilt: {
+      default: 0
+    },
     enabled: {
       type: 'boolean',
       default: true
@@ -92,7 +95,8 @@ AFRAME.registerComponent('spherical-controls', {
   },
 
   tick: (function () {
-    var matrix = new THREE.Matrix4();
+    const matrix = new THREE.Matrix4();
+    const rotationMatrix = new THREE.Matrix4();
 
     return function (time, delta) {
       if (!this.data.enabled || this.paused || !this.enabled || this.speed <= 0) return;
@@ -104,7 +108,7 @@ AFRAME.registerComponent('spherical-controls', {
 
       // set length of forward z-axis
       // var forward = this.getForward().setLength(velocity.length());
-      var forward = this._getForward().setLength(velocity);
+      const forward = this._getForward().setLength(velocity);
 
       // change position by forward
       if (this.position.add(forward)) {
@@ -124,11 +128,11 @@ AFRAME.registerComponent('spherical-controls', {
       // calculate with the cross product the real forward/look vector
 
       // up or normal vector
-      var up = this.position.clone().sub(this.origin).normalize();
+      const up = this.position.clone().sub(this.origin).normalize();
       // tangent vector
-      var tangent = up.clone().cross(this.look).normalize();
+      const tangent = up.clone().cross(this.look).normalize();
       // look vector or binormal/bitangent vector
-      var look = tangent.clone().cross(up).normalize();
+      const look = tangent.clone().cross(up).normalize();
 
       // object.quaternion.setFromUnitVectors(this.forward, look);
       this.look = look;
@@ -140,6 +144,9 @@ AFRAME.registerComponent('spherical-controls', {
       c[4] = up.x, c[5] = up.y, c[6] = up.z, c[7] = 0;   // up Vector
       c[8] = look.x, c[9] = look.y, c[10] = look.z, c[11] = 0; // look vector
       c[12] = this.position.x, c[13] = this.position.y, c[14] = this.position.z, c[15] = 1;
+
+      rotationMatrix.makeRotationX(THREE.Math.degToRad(this.data.tilt));
+      matrix.multiply(rotationMatrix);
 
       const object = this.el.object3D;
       object.matrixAutoUpdate = false;

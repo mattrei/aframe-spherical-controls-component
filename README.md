@@ -24,6 +24,7 @@ The component sets the matrix of the entity directly. Use the _position_ and _ro
 | lng | Sets the spherical position according to the planar longitude (between -180 and 180) coordinate in degrees  | 0 |
 | upVector | Sets the up vector like in the `lookAt` function of Three.JS. Hardly ever needed to set manually | 0 1 0 |
 | vrMode | Whether the controls are only enabled when in mobile VR mode | false |
+| tilt | Tilt of camera in degrees | 0 |
 | enabled | Whether the controls are enabled | true |
 
 ### Methods
