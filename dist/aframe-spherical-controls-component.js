@@ -180,7 +180,7 @@ AFRAME.registerComponent('spherical-controls', {
 
       // set length of forward z-axis
       // var forward = this.getForward().setLength(velocity.length());
-      var forward = this._getForward().setLength(velocity);
+      const forward = this._getForward().setLength(velocity);
 
       // change position by forward
       if (this.position.add(forward)) {
@@ -200,11 +200,11 @@ AFRAME.registerComponent('spherical-controls', {
       // calculate with the cross product the real forward/look vector
 
       // up or normal vector
-      var up = this.position.clone().sub(this.origin).normalize();
+      const up = this.position.clone().sub(this.origin).normalize();
       // tangent vector
-      var tangent = up.clone().cross(this.look).normalize();
+      const tangent = up.clone().cross(this.look).normalize();
       // look vector or binormal/bitangent vector
-      var look = tangent.clone().cross(up).normalize();
+      const look = tangent.clone().cross(up).normalize();
 
       // object.quaternion.setFromUnitVectors(this.forward, look);
       this.look = look;
