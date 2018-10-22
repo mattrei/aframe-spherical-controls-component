@@ -58,15 +58,15 @@ AFRAME.registerComponent('spherical-controls', {
 
     if (data.vrMode) {
       el.sceneEl.addEventListener('enter-vr', () => {
-	if (!AFRAME.utils.device.checkHeadsetConnected() &&
-	    !AFRAME.utils.device.isMobile()) { return; }
-	this.enabled = true;
+        if (!AFRAME.utils.device.checkHeadsetConnected() &&
+          !AFRAME.utils.device.isMobile()) { return; }
+        this.enabled = true;
       });
 
       el.sceneEl.addEventListener('exit-vr', () => {
-	if (!AFRAME.utils.device.checkHeadsetConnected() &&
-	    !AFRAME.utils.device.isMobile()) { return; }
-	this.enabled = false;
+        if (!AFRAME.utils.device.checkHeadsetConnected() &&
+          !AFRAME.utils.device.isMobile()) { return; }
+        this.enabled = false;
       });
     }
 
@@ -210,7 +210,8 @@ AFRAME.registerComponent('spherical-controls', {
     );
   },
 
-  remove: function () { },
+  remove: function () {
+  },
 
   pause: function () {
     this.paused = true;
